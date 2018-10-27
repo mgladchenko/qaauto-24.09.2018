@@ -1,8 +1,9 @@
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import static java.lang.Thread.sleep;
 
 public class LoginPage {
 
@@ -32,10 +33,22 @@ public class LoginPage {
         return signInButton.isDisplayed();
     }
 
-    public HomePage login(String userEmail, String userPassword){
+    public <T> T login(String userEmail, String userPassword){
         userEmailField.sendKeys(userEmail);
         userPasswordField.sendKeys(userPassword);
         signInButton.click();
-        return new HomePage(webDriver);
+        try {
+            sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (webDriver.getCurrentUrl().contains("/feed")) {
+            return (T) new HomePage(webDriver);
+        }
+        if (webDriver.getCurrentUrl().contains("/uas/login-submit")) {
+            return (T) new LoginSubmit(webDriver);
+        } else {
+            return (T) new LoginPage(webDriver);
+        }
     }
 }

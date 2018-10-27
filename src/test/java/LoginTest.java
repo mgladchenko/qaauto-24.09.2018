@@ -5,6 +5,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class LoginTest {
@@ -18,6 +19,15 @@ public class LoginTest {
     @AfterMethod
     public void afterMethod() {
         webDriver.quit();
+    }
+
+    @DataProvider
+    public Object[][] validDataProvider() {
+        return new Object[][] {
+                { "linkedin.tst.yanina@gmail.com", "Test123!"},
+                { "linkedin.TST.yanina@gmail.com", "Test123!"},
+                { " linkedin.tst.yanina@gmail.com ", "Test123!"}
+        };
     }
 
     /**
@@ -35,14 +45,14 @@ public class LoginTest {
      * PostCondition:
      * - Close FF browser.
      */
-    @Test
-    public void successfulLoginTest() {
+    @Test(dataProvider = "validDataProvider")
+    public void successfulLoginTest(String userEmail, String userPassword) {
         webDriver.get("https://linkedin.com");
         LoginPage loginPage = new LoginPage(webDriver);
 
         Assert.assertTrue(loginPage.isPageLoaded(), "Login page is not loaded.");
 
-        HomePage homePage = loginPage.login("linkedin.tst.yanina@gmail.com", "Test123!");
+        HomePage homePage = loginPage.login( userEmail, userPassword);
 
         Assert.assertTrue(homePage.isPageLoaded(),
                 "HomePage is not displayed on Login page.");
