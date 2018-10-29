@@ -1,6 +1,4 @@
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -10,10 +8,14 @@ import org.testng.annotations.Test;
 
 public class LoginTest {
     WebDriver webDriver;
+    LoginPage loginPage;
 
     @BeforeMethod
     public void beforeMethod() {
         webDriver = new FirefoxDriver();
+        webDriver.get("https://www.linkedin.com");
+        loginPage = new LoginPage(webDriver);
+
     }
 
     @AfterMethod
@@ -47,9 +49,6 @@ public class LoginTest {
      */
     @Test(dataProvider = "validDataProvider")
     public void successfulLoginTest(String userEmail, String userPassword) {
-        webDriver.get("https://linkedin.com");
-        LoginPage loginPage = new LoginPage(webDriver);
-
         Assert.assertTrue(loginPage.isPageLoaded(), "Login page is not loaded.");
 
         HomePage homePage = loginPage.login( userEmail, userPassword);
@@ -60,9 +59,6 @@ public class LoginTest {
 
     @Test
     public void negativeLoginWithEmptyPasswordTest(){
-        webDriver.get("https://linkedin.com");
-        LoginPage loginPage = new LoginPage(webDriver);
-
         Assert.assertEquals(webDriver.getCurrentUrl(), "https://www.linkedin.com/",
                 "Login page URL is wrong.");
 
@@ -72,17 +68,37 @@ public class LoginTest {
                 "Login page URL is wrong.");
     }
 
-    @Test
-    public void negativeLoginWithWrongPasswordTest(){
-        webDriver.get("https://linkedin.com");
-        LoginPage loginPage = new LoginPage(webDriver);
+    @DataProvider
+    public Object[][] validationMessagesCombinations() {
+        return new Object[][] {
+                { "linkedin.tst.yanina@gmail.com", "wrong", "", "The password you provided must have at least 6 characters."},
 
-        Assert.assertEquals(webDriver.getCurrentUrl(), "https://www.linkedin.com/",
-                "Login page URL is wrong.");
+        };
+    }
 
-        loginPage.login("linkedin.tst.yanina@gmail.com", "wrong");
+    @Test(dataProvider = "validationMessagesCombinations")
+    public void validationMessagesOnInvalidEmailPasswordTest(String userEmail,
+                                                        String userPassword,
+                                                        String emailValidationMessage,
+                                                        String passwordValidationMessage){
+        Assert.assertTrue(loginPage.isPageLoaded(), "Login page is not loaded.");
 
-        Assert.assertEquals(webDriver.getCurrentUrl(), "https://www.linkedin.com/",
-                "Login-Submit page URL is wrong.");
+        LoginSubmitPage loginSubmitPage = loginPage.login(userEmail, userPassword);
+        Assert.assertTrue(loginSubmitPage.isPageLoaded(), "LoginSubmitPage page is not loaded.");
+
+        Assert.assertEquals(loginSubmitPage.getAlertMessageText(),
+                "There were one or more errors in your submission. Please correct the marked fields below.",
+                "Alert message text is wrong.");
+
+        Assert.assertEquals(loginSubmitPage.getEmailValidationMessage(), emailValidationMessage,
+                "Email validation message is wrong.");
+        Assert.assertEquals(loginSubmitPage.getPasswordValidationMessage(), passwordValidationMessage,
+                "Password validation message is wrong.");
+
+
+
+
+
+
     }
 }
