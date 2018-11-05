@@ -1,29 +1,13 @@
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
+package test;
+
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import page.HomePage;
+import page.SearchPage;
 
 import java.util.List;
 
-public class SearchTest {
-
-    WebDriver webDriver;
-    LoginPage loginPage;
-
-    @BeforeMethod
-    public void beforeMethod() {
-        webDriver = new FirefoxDriver();
-        webDriver.get("https://www.linkedin.com");
-        loginPage = new LoginPage(webDriver);
-
-    }
-
-    @AfterMethod
-    public void afterMethod() {
-        webDriver.quit();
-    }
+public class SearchTest extends BaseTest {
 
     /**
      * PreConditions:
@@ -51,7 +35,7 @@ public class SearchTest {
         HomePage homePage = loginPage.login("linkedin.tst.yanina@gmail.com", "Test123!");
 
         Assert.assertTrue(homePage.isPageLoaded(),
-                "HomePage is not displayed on Login page.");
+                "page.HomePage is not displayed on Login page.");
 
         SearchPage searchPage = homePage.search(searchTerm);
         Assert.assertTrue(searchPage.isPageLoaded(), "Search page is not loaded.");

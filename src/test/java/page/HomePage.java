@@ -1,4 +1,5 @@
-import org.openqa.selenium.By;
+package page;
+
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,8 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import static java.lang.Thread.sleep;
 
-public class HomePage {
-    private WebDriver webDriver;
+public class HomePage extends BasePage {
 
     @FindBy(xpath = "//li[@id='profile-nav-item']")
     private WebElement profileNavItem;
@@ -24,7 +24,7 @@ public class HomePage {
         PageFactory.initElements(webDriver, this);
     }
 
-    public boolean isPageLoaded() {
+    public boolean isHomePageLoaded() {
         return webDriver.getCurrentUrl().equals("https://www.linkedin.com/feed/")
                 && webDriver.getTitle().contains("LinkedIn")
                 && profileNavItem.isDisplayed();
@@ -39,5 +39,9 @@ public class HomePage {
             e.printStackTrace();
         }
         return new SearchPage(webDriver);
+    }
+
+    public boolean isPageLoaded() {
+        return false;
     }
 }
