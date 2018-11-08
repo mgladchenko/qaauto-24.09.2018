@@ -7,7 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import static java.lang.Thread.sleep;
 
-public class LoginPage {
+public class LoginPage extends BasePage {
 
     private WebDriver webDriver;
 
@@ -39,11 +39,7 @@ public class LoginPage {
     }
 
     public RequestPasswordResetPage clickOnForgotPasswordLink() {
-        try {
-            sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        waitUntilElementIsClickable(forgotPasswordLink);
         forgotPasswordLink.click();
         return new RequestPasswordResetPage(webDriver);
     }

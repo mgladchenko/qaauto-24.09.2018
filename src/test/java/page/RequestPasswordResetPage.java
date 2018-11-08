@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import util.GMailService;
 
-public class RequestPasswordResetPage {
+public class RequestPasswordResetPage extends BasePage {
     private WebDriver webDriver;
 
     @FindBy(xpath = "//input[@name='userName']")
@@ -20,26 +20,20 @@ public class RequestPasswordResetPage {
         PageFactory.initElements(webDriver, this);
     }
 
-    public boolean isLoaded() {
+    public boolean isPageLoaded() {
         return findAccountButton.isDisplayed();
                 //&& getCurrentTitle().equals("Reset Password | LinkedIn")
                 //&& getCurrentUrl().contains("uas/request-password-reset");
     }
 
     public PasswordResetSubmitPage findAccount(String userEmail) {
-        GMailService gMailService = new GMailService();
+        gMailService = new GMailService();
         gMailService.connect();
 
         userEmailField.sendKeys(userEmail);
         findAccountButton.click();
 
-        String messageSubject = "here's the link to reset your password";
-        String messageTo = "linkedin.tst.yanina@gmail.com";
-        String messageFrom = "security-noreply@linkedin.com";
-
-        String message = gMailService.waitMessage(messageSubject, messageTo, messageFrom, 180);
-        System.out.println("Content: " + message);
-
         return new PasswordResetSubmitPage(webDriver);
     }
+
 }

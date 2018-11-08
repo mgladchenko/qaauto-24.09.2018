@@ -1,5 +1,6 @@
 package page;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -7,7 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import static java.lang.Thread.sleep;
 
-public class PasswordResetSubmitPage {
+public class PasswordResetSubmitPage extends BasePage{
     private WebDriver webDriver;
 
     @FindBy(xpath = "//button[@id='resend-url']")
@@ -18,7 +19,7 @@ public class PasswordResetSubmitPage {
         PageFactory.initElements(webDriver, this);
     }
 
-    public boolean isLoaded() {
+    public boolean isPageLoaded() {
         try {
             sleep(5000);
         } catch (InterruptedException e) {
@@ -34,11 +35,12 @@ public class PasswordResetSubmitPage {
         String messageTo = "linkedin.tst.yanina@gmail.com";
         String messageFrom = "security-noreply@linkedin.com";
 
-        //String message = gMailService.waitMessage(messageSubject, messageTo, messageFrom, 180);
-        //System.out.println("Content: " + message);
-
-        //System.out.println(resetPasswordLink);
-       // webDriver.get(resetPasswordLink);
+        String message = gMailService.waitMessage(messageSubject, messageTo, messageFrom, 180);
+        System.out.println("Content: " + message);
+        String resetPasswordLink = StringUtils.substringBetween(
+                message, "click <a href=\"", "\"").replace("amp;", "");
+        System.out.println(resetPasswordLink);
+        webDriver.get(resetPasswordLink);
 
 
         //ToDO:
