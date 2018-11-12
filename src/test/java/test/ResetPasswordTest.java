@@ -17,7 +17,7 @@ public class ResetPasswordTest extends BaseTest {
 
         RequestPasswordResetPage requestPasswordResetPage =
                 loginPage.clickOnForgotPasswordLink();
-        Assert.assertTrue(requestPasswordResetPage.isLoaded(),
+        Assert.assertTrue(requestPasswordResetPage.isPageLoaded(),
                 "page.RequestPasswordResetPage is not loaded.");
 
         PasswordResetSubmitPage passwordResetSubmitPage =
@@ -25,7 +25,7 @@ public class ResetPasswordTest extends BaseTest {
 
 
         sleep(180000);
-        Assert.assertTrue(passwordResetSubmitPage.isLoaded(),
+        Assert.assertTrue(passwordResetSubmitPage.isPageLoaded(),
                 "page.PasswordResetSubmitPage is not loaded.");
 
         SetNewPasswordPage linkedinSetNewPasswordPage =
