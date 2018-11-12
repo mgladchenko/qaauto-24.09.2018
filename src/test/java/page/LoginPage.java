@@ -44,6 +44,13 @@ public class LoginPage extends BasePage {
         return new RequestPasswordResetPage(webDriver);
     }
 
+    /**
+     * Method that logs in with specific credentials.
+     * @param userEmail - String with userEmail.
+     * @param userPassword - String with userPassword.
+     * @param <T> - Generic type to cast different Page Objects.
+     * @return Either HomePage/LoginSubmitPage/LoginPage object.
+     */
     public <T> T login(String userEmail, String userPassword){
         userEmailField.sendKeys(userEmail);
         userPasswordField.sendKeys(userPassword);
